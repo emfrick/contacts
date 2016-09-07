@@ -12,6 +12,7 @@ TitleController.$inject = [];
  * Controller Definition
  */
 function TitleController() {
+  console.log("TitleController Instantiated");
 
   var vm = this;
 
