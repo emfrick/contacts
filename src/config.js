@@ -5,7 +5,7 @@ AppConfig.$inject = ['$urlRouterProvider', '$stateProvider'];
 function AppConfig($urlRouterProvider, $stateProvider) {
 
   var homeState = {
-    name: 'default',
+    name: 'home',
     url: '/',
     controller: 'HomeCtrl',
     controllerAs: 'home',
