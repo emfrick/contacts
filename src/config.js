@@ -4,15 +4,15 @@ AppConfig.$inject = ['$urlRouterProvider', '$stateProvider'];
 
 function AppConfig($urlRouterProvider, $stateProvider) {
 
-  var defaultState = {
+  var homeState = {
     name: 'default',
     url: '/',
-    controller: 'TitleCtrl',
-    controllerAs: 'title',
-    templateUrl: './public/title.html'
+    controller: 'HomeCtrl',
+    controllerAs: 'home',
+    templateUrl: './public/home.html'
   }
 
-  $stateProvider.state(defaultState);
+  $stateProvider.state(homeState);
 
   $urlRouterProvider.otherwise('/');
 }

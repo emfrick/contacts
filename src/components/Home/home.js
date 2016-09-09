@@ -1,20 +1,20 @@
 /**
  * Export the controller
  */
-module.exports = TitleController;
+module.exports = HomeController;
 
 /**
  * Controller Dependencies
  */
-TitleController.$inject = [];
+HomeController.$inject = [];
 
 /**
  * Controller Definition
  */
-function TitleController() {
+function HomeController() {
 
   var vm = this;
 
-  vm.title = "New Title";
+  vm.title = "Home Page";
 
 };
