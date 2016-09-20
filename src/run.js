@@ -1,15 +1,19 @@
 module.exports = runBlock;
 
-runBlock.$inject = ['$rootScope'];
+runBlock.$inject = ['$rootScope', 'AuthFactory'];
 
-function runBlock($rootScope) {
+function runBlock($rootScope, AuthFactory) {
   console.log("Run Block");
 
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+  $rootScope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams, options) => {
     console.log('$stateChangeStart', fromState, toState);
   });
 
-  $rootScope.$on('$locationChangeStart', (location) => {
+  $rootScope.$on('$locationChangeStart', (event, location) => {
     console.log('$locationChangeStart', location);
+
+    if (AuthFactory.accessTokenPresent(location)) {
+      console.log("ACCESS TOKEN PRESENT");
+    }
   });
 }

@@ -7,4 +7,5 @@ angular
   .config(require('./config'))
   .run(require('./run'))
   .controller('HomeCtrl', require('./components/Home/home'))
-  .controller('LoginCtrl', require('./components/Login/login'));
+  .controller('LoginCtrl', require('./components/Login/login'))
+  .factory('AuthFactory', require('./components/Auth/auth'));
