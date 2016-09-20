@@ -6,18 +6,14 @@ module.exports = LoginController;
 /**
  * Controller Dependencies
  */
-LoginController.$inject = ['AuthService'];
+LoginController.$inject = [];
 
 /**
  * Controller Definition
  */
-function LoginController(AuthService) {
+function LoginController() {
   console.log("LoginController Instantiated");
 
   var vm = this;
-
-  // Put the authService on $scope to access
-  // the login method in the view
-  vm.authService = AuthService;
 
 };

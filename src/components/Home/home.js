@@ -6,12 +6,12 @@ module.exports = HomeController;
 /**
  * Controller Dependencies
  */
-HomeController.$inject = ['$rootScope'];
+HomeController.$inject = [];
 
 /**
  * Controller Definition
  */
-function HomeController($rootScope) {
+function HomeController() {
   console.log("HomeController Instantiated");
 
   var vm = this;

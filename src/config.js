@@ -1,32 +1,9 @@
 module.exports = AppConfig;
 
-AppConfig.$inject = ['$urlRouterProvider', '$stateProvider', 'lockProvider', '$httpProvider', 'jwtOptionsProvider'];
+AppConfig.$inject = ['$urlRouterProvider', '$stateProvider', '$httpProvider'];
 
-function AppConfig($urlRouterProvider, $stateProvider, lockProvider, $httpProvider, jwtOptionsProvider) {
-
-  console.log("AppConfig", lockProvider, jwtOptionsProvider);
-
-  lockProvider.init({
-    clientID: 'b0SrKFAJg4DCAMDQvU3KbcMr1X316mxN',
-    domain: 'recruiter.auth0.com'
-  });
-
-  lockProvider.options = {
-    auth: {
-      redirectUrl: "http://localhost:8080/",
-      responseType: "token"
-    }
-  };
-
-  jwtOptionsProvider.config({
-    loginPath: '/login',
-    unauthenticatedRedirectPath: '/help',
-    tokenGetter: function() {
-      return localStorage.getItem('id_token');
-    }
-  });
-
-  $httpProvider.interceptors.push('jwtInterceptor');
+function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
+  console.log("AppConfig");
 
   var defaultState = {
     name: 'default',
@@ -34,7 +11,7 @@ function AppConfig($urlRouterProvider, $stateProvider, lockProvider, $httpProvid
     controller: 'HomeCtrl',
     controllerAs: 'home',
     templateUrl: '../views/home.html'
-  }
+  };
 
   var loginState = {
     name: 'login',
@@ -42,17 +19,10 @@ function AppConfig($urlRouterProvider, $stateProvider, lockProvider, $httpProvid
     controller: 'LoginCtrl',
     controllerAs: 'login',
     templateUrl: '../views/login.html'
-  }
-
-  var authState = {
-    name: 'auth',
-    url: 'access_token={.*}',
-    template: '<h1>Authorized</h1>'
-  }
+  };
 
   $stateProvider.state(defaultState);
-  $stateProvider.state(loginState)
-  $stateProvider.state(authState);
+  $stateProvider.state(loginState);
 
-  //$urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/');
 }
