@@ -15,10 +15,14 @@ function AuthFactory($window, $http) {
   console.log("AuthFactory Instantiated");
 
   // API
-  return {
+  var service = {
     google: doGoogleLogin,
-    accessTokenPresent: accessTokenPresent
-  }
+    accessTokenPresent: accessTokenPresent,
+    exchangeForToken: exchangeForToken,
+    access_token: ''
+  };
+
+  return service;
 
   //
   // Authenticates with Google OAuth 2
@@ -44,23 +48,24 @@ function AuthFactory($window, $http) {
   function accessTokenPresent(location) {
     console.log("AuthService.accessTokenPresent()", location);
 
-    if (localStorage.getItem('token')) {
-      return true;
-    }
-    else if (/access_token=/.test(location)) {
+    if (/access_token=/.test(location)) {
       var params = parseHash();
 
-      console.log(params);
-
-      $http.get('https://www.googleapis.com/userinfo/v2/me?access_token=' + params['/access_token'])
-           .then((res) => {
-             console.log(res);
-           })
+      service.access_token = params['/access_token'];
 
       return true;
     }
 
     return false;
+  };
+
+  function exchangeForToken(access_token) {
+    console.log("AuthService.exchangeForToken()", access_token);
+
+    $http.post('http://localhost:3001/api/auth/google', { access_token: access_token })
+         .then((res) => {
+           console.log(res);
+         });
   }
 
   //

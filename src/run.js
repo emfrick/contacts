@@ -14,6 +14,8 @@ function runBlock($rootScope, AuthFactory) {
 
     if (AuthFactory.accessTokenPresent(location)) {
       console.log("ACCESS TOKEN PRESENT");
+
+      AuthFactory.exchangeForToken(AuthFactory.access_token);
     }
   });
 }
