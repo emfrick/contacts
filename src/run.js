@@ -5,17 +5,18 @@ runBlock.$inject = ['$rootScope', 'AuthFactory'];
 function runBlock($rootScope, AuthFactory) {
   console.log("Run Block");
 
-  $rootScope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams, options) => {
-    console.log('$stateChangeStart', fromState, toState);
-  });
+  //
+  // AuthFactory will check for OAuth redirects
+  //
+  AuthFactory.registerLocationListener($rootScope);
 
-  $rootScope.$on('$locationChangeStart', (event, location) => {
-    console.log('$locationChangeStart', location);
+  //
+  // Register a JWT Interceptor
+  //
+  //AuthFactory.registerJwtInterceptor();
 
-    if (AuthFactory.accessTokenPresent(location)) {
-      console.log("ACCESS TOKEN PRESENT");
-
-      AuthFactory.exchangeForToken(AuthFactory.access_token);
-    }
-  });
+  //
+  // Register the Unauthorized (401) Interceptor
+  //
+  //AuthFactory.registerHttpInterceptor();
 }

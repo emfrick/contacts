@@ -16,6 +16,6 @@ function LoginController(AuthFactory) {
 
   var vm = this;
 
-  vm.login = AuthFactory.google;
+  vm.authenticate = AuthFactory.authenticate;
 
 };

@@ -16,21 +16,24 @@ function AuthFactory($window, $http) {
 
   // API
   var service = {
-    google: doGoogleLogin,
-    accessTokenPresent: accessTokenPresent,
-    exchangeForToken: exchangeForToken,
+    login: login,
+    logout: logout,
+    authenticate: authenticate,
+    registerLocationListener: registerLocationListener,
     access_token: ''
   };
 
-  return service;
+  // Constants
+  var CONSTANTS = {
+    GOOGLE: 'google',
+    LOCAL: 'local'
+  }
 
-  //
-  // Authenticates with Google OAuth 2
-  //
-  function doGoogleLogin() {
+  // Define defaults
+  const defaults = {
 
-    // Define defaults
-    const defaults = {
+    // For Google OAuth 2
+    google: {
       endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
       response_type: 'token',
       client_id: '136862652493-j05pu5qourta487hnk17g9db9iua2tri.apps.googleusercontent.com',
@@ -38,13 +41,69 @@ function AuthFactory($window, $http) {
       scope: encodeURIComponent('email profile')
     }
 
-    // Build the URL
-    var url = `${defaults.endpoint}?response_type=${defaults.response_type}&client_id=${defaults.client_id}&redirect_uri=${defaults.redirect_uri}&scope=${defaults.scope}`;
+  };
 
-    // Redirect to Google
+  //
+  // Login with a local provider (non-OAuth)
+  //
+  function login() {
+
+  }
+
+  //
+  // Remove the application token
+  //
+  function logout() {
+    console.log("AuthFactory.logout()");
+
+    localStorage.removeItem('token');
+    delete $http.defaults.headers.common['Authorization'];
+  }
+
+  //
+  // Authenticates with the given OAuth 2 provider
+  //
+  function authenticate(provider) {
+    console.log("AuthFactory.authenticate()", provider);
+
+    var url = '';
+
+    if (provider === CONSTANTS.GOOGLE) {
+      // Build the URL
+      url = `${defaults.google.endpoint}?response_type=${defaults.google.response_type}&client_id=${defaults.google.client_id}&redirect_uri=${defaults.google.redirect_uri}&scope=${defaults.google.scope}`;
+    }
+
+    // Redirect to the OAuth Provider
     $window.location.href = url;
   };
 
+  //
+  // This function will watch for changes to the URL
+  //
+  function registerLocationListener(scope) {
+    console.log("AuthFactory.registerLocationListener()");
+
+    scope.$on('$locationChangeStart', (event, location) => {
+      console.log('$locationChangeStart', location);
+
+      // Check if there is an access_token
+      if (accessTokenPresent(location)) {
+
+        // Exchange the OAuth token for an application token, and once
+        // received, add it to local storage and send it for all future requests
+        exchangeForApplicationToken(service.access_token)
+          .then((token) => {
+            localStorage.setItem('token', token);
+            $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+          });
+      }
+
+    });
+  };
+
+  //
+  // Check for an "access_token" in the URL
+  //
   function accessTokenPresent(location) {
     console.log("AuthService.accessTokenPresent()", location);
 
@@ -59,14 +118,17 @@ function AuthFactory($window, $http) {
     return false;
   };
 
-  function exchangeForToken(access_token) {
-    console.log("AuthService.exchangeForToken()", access_token);
+  //
+  // Exchanges the OAuth token for an application token on the backend
+  //
+  function exchangeForApplicationToken(access_token) {
+    console.log("AuthService.exchangeForApplicationToken()", access_token);
 
-    $http.post('http://localhost:3001/api/auth/google', { access_token: access_token })
-         .then((res) => {
-           console.log(res);
-         });
-  }
+    return $http.post('http://localhost:3001/api/auth/google', { access_token: access_token })
+                .then((res) => {
+                  return res.data.token;
+                });
+  };
 
   //
   // Parses the returned hash into an object
@@ -83,5 +145,7 @@ function AuthFactory($window, $http) {
 
     return params;
   }
+
+  return service;
 
 };
