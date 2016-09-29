@@ -1,15 +1,22 @@
 module.exports = runBlock;
 
-runBlock.$inject = ['$rootScope'];
+runBlock.$inject = ['$rootScope', 'AuthFactory'];
 
-function runBlock($rootScope) {
+function runBlock($rootScope, AuthFactory) {
   console.log("Run Block");
 
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
-    console.log('$stateChangeStart', fromState, toState);
-  });
+  //
+  // AuthFactory will check for OAuth redirects
+  //
+  AuthFactory.registerLocationListener($rootScope);
 
-  $rootScope.$on('$locationChangeStart', (location) => {
-    console.log('$locationChangeStart', location);
-  });
+  //
+  // Register a JWT Interceptor
+  //
+  //AuthFactory.registerJwtInterceptor();
+
+  //
+  // Register the Unauthorized (401) Interceptor
+  //
+  //AuthFactory.registerHttpInterceptor();
 }
