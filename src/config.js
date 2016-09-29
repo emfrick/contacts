@@ -5,8 +5,8 @@ AppConfig.$inject = ['$urlRouterProvider', '$stateProvider', '$httpProvider'];
 function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
   console.log("AppConfig");
 
-  var defaultState = {
-    name: 'default',
+  var homeState = {
+    name: 'home',
     url: '/',
     controller: 'HomeCtrl',
     controllerAs: 'home',
@@ -21,8 +21,8 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
     templateUrl: '../views/login.html'
   };
 
-  $stateProvider.state(defaultState);
   $stateProvider.state(loginState);
-
+  $stateProvider.state(homeState);
+  
   $urlRouterProvider.otherwise('/');
 }

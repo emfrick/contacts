@@ -12,8 +12,9 @@ HomeController.$inject = [];
  * Controller Definition
  */
 function HomeController() {
-  console.log("HomeController Instantiated");
 
   var vm = this;
+
+  vm.title = "Home Page";
 
 };
