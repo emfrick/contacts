@@ -13,6 +13,12 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
     templateUrl: '../views/login.html'
   };
 
+  var signupState = {
+    name: 'signup',
+    url: '/signup',
+    templateUrl: '../views/signup.html'
+  };
+
   var homeState = {
     name: 'home',
     url: '/home',
@@ -22,6 +28,7 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
   };
 
   $stateProvider.state(loginState);
+  $stateProvider.state(signupState);
   $stateProvider.state(homeState);
 
   $urlRouterProvider.otherwise('/');

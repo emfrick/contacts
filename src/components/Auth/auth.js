@@ -20,6 +20,7 @@ function AuthFactory($window, $http) {
     logout: logout,
     authenticate: authenticate,
     registerLocationListener: registerLocationListener,
+    registerJwtInterceptor: registerJwtInterceptor,
     access_token: ''
   };
 
@@ -99,6 +100,13 @@ function AuthFactory($window, $http) {
       }
 
     });
+  };
+
+  //
+  // Listen for a JWT in the response
+  //
+  function registerJwtInterceptor() {
+
   };
 
   //
