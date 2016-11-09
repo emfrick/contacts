@@ -3,6 +3,7 @@ require('angular-ui-router');
 require('angular-ui-bootstrap');
 require('angular-lock');
 require('angular-jwt');
+require('lodash');
 
 angular
   .module('recruiter', ['ui.router', 'ui.bootstrap', 'auth0.lock', 'angular-jwt'])
@@ -10,4 +11,7 @@ angular
   .run(require('./run'))
   .controller('HomeCtrl', require('./components/Home/home'))
   .controller('LoginCtrl', require('./components/Login/login'))
-  .factory('AuthFactory', require('./components/Auth/auth'));
+  .controller('BanksCtrl', require('./components/Banks/banks'))
+  .controller('BankDetailsCtrl', require('./components/Banks/bankDetails'))
+  .factory('AuthFactory', require('./components/Auth/auth'))
+  .factory('BanksFactory', require('./components/Banks/banks.service'));

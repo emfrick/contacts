@@ -25,12 +25,12 @@
     <!-- Sidebar -->
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
-        <li class="active">
-          <a href="#">
+        <li>
+          <a ui-sref="home">
             <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
           </a>
         </li>
-        <li>
+        <li class="active">
           <a ui-sref="banks">
             <span class="glyphicon glyphicon-briefcase"></span> Banks
           </a>
@@ -45,25 +45,42 @@
 
     <!-- Content -->
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-      <h1>Dashboard</h1>
+      <ui-view>
+        <h1>Banks</h1>
 
-      <div class="row">
-        <div class="col-sm-4">
-          <h3>Number of Banks</h3>
-          <p>2665</p>
+        <div class="row">
+
+          <div class="col-sm-12">
+            <form class="form-horizontal">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-search"></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Name or Zipcode">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
         </div>
 
-        <div class="col-sm-4">
-          <h3>Recruits</h3>
-          <p>43</p>
-        </div>
-
-        <div class="col-sm-4">
-          <h3>Other</h3>
-          <p>12</p>
-        </div>
-      </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="list-group">
+              <div ng-repeat="bank in banks.banks">
+                <a ui-sref="banks.bank({ id: bank._id })" class="list-group-item">
+                  <h4 class="list-group-item-heading">{{bank.name}}</h4>
+                  <p class="list-group-item-text">{{bank.address}}</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>        
+      </ui-view>
     </div>
+    <!-- // Content -->
 
   </div>
 </div>
