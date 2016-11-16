@@ -45,7 +45,27 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
       bank: ($stateParams, BanksFactory) => {
         return BanksFactory.get($stateParams.id)
                     .then((bank) => {
-                      console.log("OKOKOK", bank);
+                      console.log("resolve.bankdetails", bank);
+                      return bank;
+                    })
+                    .catch((err) => {
+                      console.error("NOPE");
+                    });
+      }
+    }
+  };
+
+  var bankEditState = {
+    name: 'banks.bank.edit',
+    url: '/edit',
+    controller: 'BankDetailsCtrl',
+    controllerAs: 'bank',
+    templateUrl: '../views/bank_edit.html',
+    resolve: {
+      bank: ($stateParams, BanksFactory) => {
+        return BanksFactory.get($stateParams.id)
+                    .then((bank) => {
+                      console.log("resolve.bankedit", bank);
                       return bank;
                     })
                     .catch((err) => {
@@ -60,6 +80,7 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
   $stateProvider.state(homeState);
   $stateProvider.state(banksState);
   $stateProvider.state(bankDetailState);
+  $stateProvider.state(bankEditState);
 
   $urlRouterProvider.otherwise('/');
 }

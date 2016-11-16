@@ -1,53 +1,117 @@
-<a ui-sref="banks"><span class="glyphicon glyphicon-chevron-left"></span> Back to list</a>
-
-<h1>{{bank.bank.name}}</h1>
-
-<div class="row">
-
-  <div class="col-sm-12">
-    <div class="list-group">
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">Address</h4>
-        <p class="list-group-item-text">{{bank.bank.address}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">City</h4>
-        <p class="list-group-item-text">{{bank.bank.city}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">State</h4>
-        <p class="list-group-item-text">{{bank.bank.state}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">Postal Code</h4>
-        <p class="list-group-item-text">{{bank.bank.zipcode}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">County</h4>
-        <p class="list-group-item-text">{{bank.bank.county}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">City of High Holder</h4>
-        <p class="list-group-item-text">{{bank.bank.city_of_high_holder || 'N/A'}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">Number of Branches</h4>
-        <p class="list-group-item-text">{{bank.bank.num_branches}}</p>
-      </div>
-
-      <div class="list-group-item">
-        <h4 class="list-group-item-heading">Website</h4>
-        <p class="list-group-item-text">
-          <a href='{{bank.bank.website}}' target='_blank'>{{bank.bank.website}}</a>
-        </p>
-      </div>
+<ui-view>
+  <div class="row">
+    <div class="col-sm-12">
+      <a ui-sref="banks">
+        <span class="glyphicon glyphicon-chevron-left"></span> Back
+      </a>
     </div>
   </div>
 
-</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>
+        {{bank.bank.name}}
+        <button ui-sref=".edit" class="btn btn-primary pull-right">
+          <span class="glyphicon glyphicon-pencil"></span> Edit
+        </a>
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-sm-12">
+      <div class="list-group">
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Address</h4>
+          <p class="list-group-item-text">{{bank.bank.address}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">City</h4>
+          <p class="list-group-item-text">{{bank.bank.city}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">State</h4>
+          <p class="list-group-item-text">{{bank.bank.state}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Postal Code</h4>
+          <p class="list-group-item-text">{{bank.bank.zipcode}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Phone</h4>
+          <p class="list-group-item-text">{{bank.bank.phone}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">County</h4>
+          <p class="list-group-item-text">{{bank.bank.county}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">City of High Holder</h4>
+          <p class="list-group-item-text">{{bank.bank.city_of_high_holder || 'N/A'}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Number of Branches</h4>
+          <p class="list-group-item-text">{{bank.bank.num_branches}}</p>
+        </div>
+
+        <div class="list-group-item">
+          <h4 class="list-group-item-heading">Website</h4>
+          <p class="list-group-item-text">
+            <a href='{{bank.bank.website}}' target='_blank'>{{bank.bank.website}}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>
+        Comments
+        <button ng-click="bank.addComment(bank._id)" class="btn btn-primary pull-right">
+          <span class="glyphicon glyphicon-plus"></span> Add Comment
+        </a>
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h3 ng-if="bank.bank.comments.length === 0">
+        No Comments
+      </h3>
+
+      <div class="list-group">
+        <div class="list-group-item" ng-repeat="comment in bank.bank.comments">
+          <h4 class="list-group-item-heading">{{comment.body}}</h4>
+          <p class="list-group-item-text">{{comment.author}} on {{comment.date | date : 'medium'}} - <a href="" ng-click="bank.removeComment(comment)">Delete</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="addCommentModal.html">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Add Comment</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <textarea class="form-control" rows="5" ng-model="comment.body" autofocus></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="commentModal.ok(comment)">Add</button>
+      <button class="btn btn-warning" type="button" ng-click="commentModal.cancel()">Cancel</button>
+    </div>
+  </script>
+
+</ui-view>
