@@ -15,7 +15,7 @@ function BanksFactory($http, $q) {
   console.log("BanksFactory Instantiated");
 
   //let apiEndpoint = '../../../data/banks.json';
-  let banksEndpoint = 'http://localhost:5555/banks';
+  let banksEndpoint = 'http://localhost:3333/banks';
 
   /** API Definition **/
   return {
@@ -58,13 +58,13 @@ function BanksFactory($http, $q) {
   function getAllBanksSuccess(response) {
     console.log('BanksFactory.getAllBanksSuccess', response);
 
-    return response.data.banks;
+    return response.data;
   }
 
   function getBankSuccess(response) {
     console.log('BanksFactory.getBankSuccess', response);
 
-    return response.data[0];
+    return response.data;
   }
 
   function responseError(err) {
