@@ -64,7 +64,7 @@ function BanksFactory($http, $q) {
   function getBankSuccess(response) {
     console.log('BanksFactory.getBankSuccess', response);
 
-    return response.data;
+    return response.data[0];
   }
 
   function responseError(err) {

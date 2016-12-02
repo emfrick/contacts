@@ -132,8 +132,9 @@ function AuthFactory($window, $http) {
   function exchangeForApplicationToken(access_token) {
     console.log("AuthService.exchangeForApplicationToken()", access_token);
 
-    return $http.post('http://localhost:3001/api/auth/google', { access_token: access_token })
+    return $http.post('http://localhost:3333/auth/google', { access_token: access_token })
                 .then((res) => {
+                  console.log("EXCHANGE COMPLETE", res);
                   return res.data.token;
                 });
   };
