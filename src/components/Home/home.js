@@ -16,9 +16,6 @@ function HomeController($state, AuthFactory) {
 
   var vm = this;
 
-  vm.logout = () => {
-    AuthFactory.logout();
-    $state.go('login');
-  };
+  vm.logout = AuthFactory.logout;
 
 };

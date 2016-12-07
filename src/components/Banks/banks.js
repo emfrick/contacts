@@ -18,6 +18,8 @@ function BanksController($state, $http, AuthFactory, BanksFactory) {
 
   vm.banks = [];
 
+  vm.logout = AuthFactory.logout;
+
   BanksFactory.all()
               .then(banks => {
                 vm.banks = banks;

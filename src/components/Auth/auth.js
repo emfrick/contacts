@@ -6,12 +6,12 @@ module.exports = AuthFactory;
 /**
  * Factory Dependencies
  */
-AuthFactory.$inject = ['$window', '$http'];
+AuthFactory.$inject = ['$window', '$http', '$rootScope', '$state'];
 
 /**
  * Factory Definition
  */
-function AuthFactory($window, $http) {
+function AuthFactory($window, $http, $rootScope, $state) {
   console.log("AuthFactory Instantiated");
 
   // API
@@ -21,6 +21,8 @@ function AuthFactory($window, $http) {
     authenticate: authenticate,
     registerLocationListener: registerLocationListener,
     registerJwtInterceptor: registerJwtInterceptor,
+    registerRefreshHandler: refreshHandler,
+    registerAuthenticationListener: authenticationListener,
     access_token: ''
   };
 
@@ -57,8 +59,7 @@ function AuthFactory($window, $http) {
   function logout() {
     console.log("AuthFactory.logout()");
 
-    localStorage.removeItem('token');
-    delete $http.defaults.headers.common['Authorization'];
+    $rootScope.$broadcast('unauthenticated', { message: 'You have been logged out' });
   }
 
   //
@@ -94,8 +95,7 @@ function AuthFactory($window, $http) {
         // received, add it to local storage and send it for all future requests
         exchangeForApplicationToken(service.access_token)
           .then((token) => {
-            localStorage.setItem('token', token);
-            $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+            $rootScope.$broadcast('authenticated', { token: token });
           });
       }
 
@@ -110,10 +110,61 @@ function AuthFactory($window, $http) {
   };
 
   //
+  // Check for token on refresh
+  //
+  function refreshHandler() {
+    console.log("AuthFactory.refreshHandler");
+    let jwtToken = localStorage.getItem('token');
+
+    if (jwtToken) {
+      $http.defaults.headers.common['Authorization'] = 'Bearer ' + jwtToken;
+    }
+  };
+
+  //
+  // Handle the 'authenticated' and 'unauthenticated' events
+  //
+  function authenticationListener() {
+
+    $rootScope.$on('$stateChangeStart', (evt, toState, toParams, fromState, fromParams) => {
+      console.log('$stateChangeStart', evt, toState, toParams, fromState, fromParams);
+
+      if (toState.requiresAuth && !localStorage.getItem('token')) {
+        evt.preventDefault();
+
+        $rootScope.$broadcast('unauthenticated', { message: 'Please login to continue', redirect: toState.name });
+      }
+    });
+
+    $rootScope.$on('authenticated', (evt, args) => {
+      console.log('AuthFactory.authenticationListeners.authenticated');
+
+      localStorage.setItem('token', args.token);
+      $http.defaults.headers.common['Authorization'] = 'Bearer ' + args.token;
+
+      if (args.redirect) {
+        $state.go(args.redirect);
+      }
+      else {
+        $state.go('home');
+      }
+    });
+
+    $rootScope.$on('unauthenticated', (evt, args) => {
+      console.log('AuthFactory.authenticationListeners.unauthenticated', args);
+
+      localStorage.removeItem('token');
+      delete $http.defaults.headers.common['Authorization'];
+
+      $state.go('login', { message: args.message, redirect: args.redirect });
+    });
+  };
+
+  //
   // Check for an "access_token" in the URL
   //
   function accessTokenPresent(location) {
-    console.log("AuthService.accessTokenPresent()", location);
+    console.log("AuthFactory.accessTokenPresent()", location);
 
     if (/access_token=/.test(location)) {
       var params = parseHash();
@@ -130,11 +181,10 @@ function AuthFactory($window, $http) {
   // Exchanges the OAuth token for an application token on the backend
   //
   function exchangeForApplicationToken(access_token) {
-    console.log("AuthService.exchangeForApplicationToken()", access_token);
+    console.log("AuthFactory.exchangeForApplicationToken()", access_token);
 
     return $http.post('http://localhost:3333/auth/google', { access_token: access_token })
                 .then((res) => {
-                  console.log("EXCHANGE COMPLETE", res);
                   return res.data.token;
                 });
   };

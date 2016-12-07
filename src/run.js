@@ -1,8 +1,8 @@
 module.exports = runBlock;
 
-runBlock.$inject = ['$rootScope', 'AuthFactory'];
+runBlock.$inject = ['$rootScope', '$http', 'AuthFactory'];
 
-function runBlock($rootScope, AuthFactory) {
+function runBlock($rootScope, $http, AuthFactory) {
   console.log("Run Block");
 
   //
@@ -19,4 +19,14 @@ function runBlock($rootScope, AuthFactory) {
   // Register the Unauthorized (401) Interceptor
   //
   //AuthFactory.registerHttpInterceptor();
+
+  //
+  // Check for local token
+  //
+  AuthFactory.registerRefreshHandler();
+
+  //
+  // Register the Authentication Listener
+  //
+  AuthFactory.registerAuthenticationListener();
 }

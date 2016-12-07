@@ -14,4 +14,5 @@ angular
   .controller('BanksCtrl', require('./components/Banks/banks'))
   .controller('BankDetailsCtrl', require('./components/Banks/bankDetails'))
   .factory('AuthFactory', require('./components/Auth/auth'))
+  .factory('APIInterceptor', require('./components/Auth/auth.interceptor'))
   .factory('BanksFactory', require('./components/Banks/banks.service'));

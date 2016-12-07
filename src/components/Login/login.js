@@ -6,15 +6,17 @@ module.exports = LoginController;
 /**
  * Controller Dependencies
  */
-LoginController.$inject = ['AuthFactory'];
+LoginController.$inject = ['$stateParams', 'AuthFactory'];
 
 /**
  * Controller Definition
  */
-function LoginController(AuthFactory) {
-  console.log("LoginController Instantiated");
+function LoginController($stateParams, AuthFactory) {
+  console.log("LoginController Instantiated", $stateParams);
 
   var vm = this;
+
+  vm.message = $stateParams.message;
 
   vm.authenticate = AuthFactory.authenticate;
 

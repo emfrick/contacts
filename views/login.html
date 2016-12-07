@@ -3,6 +3,7 @@
     <div class="Absolute-Center is-Responsive">
       <div id="logo-container"></div>
       <div class="col-sm-12 col-md-10 col-md-offset-1">
+        <div class="alert alert-danger" ng-if="login.message">{{login.message}}</div>
         <form action="" id="loginForm">
           <div class="form-group input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>

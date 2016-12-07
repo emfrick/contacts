@@ -10,7 +10,10 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
     url: '/',
     controller: 'LoginCtrl',
     controllerAs: 'login',
-    templateUrl: '../views/login.html'
+    templateUrl: '../views/login.html',
+    params: {
+      message: null
+    }
   };
 
   var signupState = {
@@ -24,7 +27,8 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
     url: '/home',
     controller: 'HomeCtrl',
     controllerAs: 'home',
-    templateUrl: '../views/home.html'
+    templateUrl: '../views/home.html',
+    requiresAuth: true
   };
 
   var banksState = {
@@ -32,7 +36,8 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
     url: '/banks',
     controller: 'BanksCtrl',
     controllerAs: 'banks',
-    templateUrl: '../views/banks.html'
+    templateUrl: '../views/banks.html',
+    requiresAuth: true
   };
 
   var bankDetailState = {
@@ -45,14 +50,11 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
       bank: ($stateParams, BanksFactory) => {
         return BanksFactory.get($stateParams.id)
                     .then((bank) => {
-                      console.log("resolve.bankdetails", bank);
                       return bank;
-                    })
-                    .catch((err) => {
-                      console.error("NOPE");
                     });
       }
-    }
+    },
+    requiresAuth: true
   };
 
   var bankEditState = {
@@ -65,14 +67,11 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
       bank: ($stateParams, BanksFactory) => {
         return BanksFactory.get($stateParams.id)
                     .then((bank) => {
-                      console.log("resolve.bankedit", bank);
                       return bank;
-                    })
-                    .catch((err) => {
-                      console.error("NOPE");
                     });
       }
-    }
+    },
+    requiresAuth: true
   };
 
   $stateProvider.state(loginState);
@@ -83,4 +82,6 @@ function AppConfig($urlRouterProvider, $stateProvider, $httpProvider) {
   $stateProvider.state(bankEditState);
 
   $urlRouterProvider.otherwise('/');
+
+  $httpProvider.interceptors.push('APIInterceptor');
 }
