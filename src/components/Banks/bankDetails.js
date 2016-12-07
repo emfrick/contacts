@@ -6,20 +6,28 @@ module.exports = BankDetailsController;
 /**
  * Controller Dependencies
  */
-BankDetailsController.$inject = ['$state', '$uibModal', 'bank', 'AuthFactory'];
+BankDetailsController.$inject = ['$state', '$uibModal', 'bank', 'AuthFactory', 'BanksFactory'];
 
 /**
  * Controller Definition
  */
-function BankDetailsController($state, $uibModal, bank, AuthFactory) {
+function BankDetailsController($state, $uibModal, bank, AuthFactory, BanksFactory) {
   console.log("BankDetailsController Instantiated", bank);
 
   var vm = this;
 
   vm.bank = bank;
+  vm.error = null;
 
   vm.save = function() {
-    $state.go('^');
+    BanksFactory.update(vm.bank)
+                .then((bank) => {
+                  vm.bank = bank;
+                  $state.go('^', {}, { reload: true });
+                })
+                .catch((err) => {
+                  vm.error = err;
+                });
   }
 
   vm.addComment = function(id) {

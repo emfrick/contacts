@@ -20,7 +20,8 @@ function BanksFactory($http, $q) {
   /** API Definition **/
   return {
     all: getAllBanks,
-    get: getBank
+    get: getBank,
+    update: updateBank
   };
 
   /** API Implementation **/
@@ -36,21 +37,17 @@ function BanksFactory($http, $q) {
   function getBank(id) {
     console.log('BanksFactory.getBank');
 
-    return $http.get(`${banksEndpoint}/` + id)
-                // .then((response) => {
-                //   return mockResult(response, id);
-                // })
+    return $http.get(`${banksEndpoint}/${id}`)
                 .then(getBankSuccess)
                 .catch(responseError);
   }
 
-  /** Mock Data Functions **/
-  function mockResult(response, id) {
-    console.log('BanksFactory.mockResult', response, id);
+  function updateBank(bank) {
+    console.log('BanksFactory.updateBank', bank);
 
-    response.data = _.find(response.data, '_id', id);
-
-    return response;
+    return $http.put(`${banksEndpoint}/${bank._id}`, bank)
+                .then(putBankSuccess)
+                .catch(responseError);
   }
 
   /** Success / Failure Handlers **/
@@ -63,6 +60,12 @@ function BanksFactory($http, $q) {
 
   function getBankSuccess(response) {
     console.log('BanksFactory.getBankSuccess', response);
+
+    return response.data[0];
+  }
+
+  function putBankSuccess(response) {
+    console.log('BanksFactory.putBankSuccess', response);
 
     return response.data[0];
   }
